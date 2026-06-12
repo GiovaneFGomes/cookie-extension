@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7a826aac-9b6b-4457-804e-56d9d0cf61e5" name="Changes" comment="feat: cookie ext">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/popup.js" afterDir="false" />
-    </list>
+    <list default="true" id="7a826aac-9b6b-4457-804e-56d9d0cf61e5" name="Changes" comment="feat: cookie ext" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1780669340850</updated>
       <workItem from="1780669341847" duration="9660000" />
-      <workItem from="1781273236500" duration="658000" />
+      <workItem from="1781273236500" duration="981000" />
     </task>
     <task id="LOCAL-00001" summary="feat: cookie ext">
       <option name="closed" value="true" />
@@ -71,7 +68,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780680469670</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat: cookie ext">
+      <option name="closed" value="true" />
+      <created>1781274320807</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1781274320807</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
