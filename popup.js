@@ -12,7 +12,7 @@ copyBtn.addEventListener("click", async () => {
 
         if (!cookies.length) return feedback(copyBtn, "⚠️ Sem cookies!", "#d97706");
 
-        const cookieString = JSON.stringify(cookies, null, 2);
+        const cookieString = cookies.map(c => `${c.name}=${c.value}`).join("; ");
 
         cookieTxt.value = cookieString;
         await navigator.clipboard.writeText(cookieString);
@@ -33,7 +33,13 @@ pasteBtn.addEventListener("click", async () => {
         try {
             cookies = JSON.parse(value);
         } catch (e) {
-            return feedback(pasteBtn, "❌ JSON inválido!", "#dc2626");
+            // tenta interpretar como string de header: name=value; name2=value2
+            cookies = value.split(";").map(pair => {
+                const idx = pair.indexOf("=");
+                if (idx === -1) return null;
+                return { name: pair.slice(0, idx).trim(), value: pair.slice(idx + 1).trim() };
+            }).filter(Boolean);
+            if (!cookies.length) return feedback(pasteBtn, "❌ Formato inválido!", "#dc2626");
         }
 
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -48,25 +54,23 @@ pasteBtn.addEventListener("click", async () => {
 
         // cola os novos
         const results = await Promise.allSettled(cookies.map(cookie => {
-            const cookieUrl = `${cookie.secure ? "https" : "http"}://${cookie.domain.startsWith(".") ? cookie.domain.slice(1) : cookie.domain}${cookie.path}`;
+            const domain = cookie.domain;
+            const cookieUrl = domain
+                ? `${cookie.secure ? "https" : "http"}://${domain.startsWith(".") ? domain.slice(1) : domain}${cookie.path || "/"}`
+                : tab.url;
 
             const newCookie = {
                 url: cookieUrl,
                 name: cookie.name,
                 value: cookie.value,
-                path: cookie.path,
-                secure: cookie.secure,
-                httpOnly: cookie.httpOnly,
-                sameSite: cookie.sameSite,
+                path: cookie.path || "/",
             };
 
-            if (cookie.expirationDate) {
-                newCookie.expirationDate = cookie.expirationDate;
-            }
-
-            if (cookie.domain.startsWith(".")) {
-                newCookie.domain = cookie.domain;
-            }
+            if (cookie.secure != null) newCookie.secure = cookie.secure;
+            if (cookie.httpOnly != null) newCookie.httpOnly = cookie.httpOnly;
+            if (cookie.sameSite) newCookie.sameSite = cookie.sameSite;
+            if (cookie.expirationDate) newCookie.expirationDate = cookie.expirationDate;
+            if (domain && domain.startsWith(".")) newCookie.domain = domain;
 
             return chrome.cookies.set(newCookie);
         }));
