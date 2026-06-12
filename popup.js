@@ -3,6 +3,8 @@ const pasteBtn = document.querySelector(".paste-btn");
 const cookieTxt = document.querySelector(".cookie");
 const footer = document.querySelector("footer");
 
+[copyBtn, pasteBtn].forEach(btn => (btn.dataset.label = btn.textContent.trim()));
+
 // Copiar cookies da aba atual
 copyBtn.addEventListener("click", async () => {
     try {
@@ -43,7 +45,6 @@ pasteBtn.addEventListener("click", async () => {
         }
 
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        const url = new URL(tab.url);
 
         // remove todos os cookies atuais
         const existing = await chrome.cookies.getAll({ url: tab.url });
@@ -101,14 +102,11 @@ cookieTxt.addEventListener("input", () => {
     }
 });
 
-// Feedback visual temporário no botão
 function feedback(btn, msg, color) {
-    const original = btn.textContent;
-    const originalBg = btn.style.background;
     btn.textContent = msg;
     btn.style.background = color;
     setTimeout(() => {
-        btn.textContent = original;
-        btn.style.background = originalBg;
+        btn.textContent = btn.dataset.label;
+        btn.style.removeProperty("background");
     }, 2000);
 }
